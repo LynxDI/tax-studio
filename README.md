@@ -1,8 +1,7 @@
 <h1 align="center">Lynx Tax Studio for VS Code</h1>
 
 <p align="center">
-  <b>A private, local-first tax document workspace.</b><br/>
-  Drop your forms in a folder — it classifies, files, and grounds every value to its source, all on your machine.
+  <b>Turn a messy folder of tax documents into a clean, fully-sourced, filing-ready package — privately, on your own machine.</b>
 </p>
 
 <p align="center">
@@ -13,39 +12,79 @@
 <p align="center">
   <img src="https://img.shields.io/badge/execution-local--first-3fb950" alt="Local-first execution">
   <img src="https://img.shields.io/badge/evidence-source--anchored-2dd4bf" alt="Source-anchored evidence">
+  <img src="https://img.shields.io/badge/output-filing--ready-eab308" alt="Filing-ready output">
   <img src="https://img.shields.io/badge/export-FDX%20JSON-4fc1ff" alt="FDX JSON export">
   <img src="https://img.shields.io/badge/agent--ready-MCP-8957e5" alt="Agent-ready MCP">
-  <img src="https://img.shields.io/badge/liability-never%20computed-eab308" alt="Never computes liability">
 </p>
 
-Drop your tax forms, expense receipts, and bank statements into an inbox. Tax Studio
-classifies them, files them into a clean year-first library per taxpayer, extracts the
-values that matter, and grounds every extracted value to the exact region of the original
-document — all on your machine. Nothing is uploaded.
+## The problem
 
-Tax Studio **never computes tax liability and never files returns.** It organizes your
-documents and produces clean, reviewable, source-anchored data — exported as
-[FDX](https://financialdataexchange.org/) (Financial Data Exchange) JSON — that you or your
-CPA can trust.
+Every tax season starts the same way: a scramble.
+
+W-2s, 1099s, 1098s, K-1s, brokerage summaries, mortgage statements, donation receipts,
+bank statements — they trickle in over weeks from a dozen portals, inboxes, and envelopes.
+Each one lands with a name like `document(3).pdf`, in no particular order, in no particular
+folder.
+
+Before anyone can actually **file**, someone has to grind through the boring, error-prone part
+by hand:
+
+- figure out what each document is, whose it is, and which tax year it belongs to,
+- rename and sort them so they're findable — this year *and* next,
+- read the numbers off every form and re-type them, box by box, into a return,
+- then double-check nothing got fat-fingered, and notice what's still missing.
+
+That sorting-reading-retyping grind is where the hours go, and where the costly mistakes creep
+in. The filing itself is the easy twenty minutes at the end — **if** the data in front of you is
+clean, complete, and you actually trust it.
+
+## The solution
+
+Drop everything into one folder and let Tax Studio do the tedious 90%.
+
+It reads each document, figures out the type, the taxpayer, and the tax year, files it into a
+clean year-first library, and pulls out every value that matters. Then it ties each number back
+to the *exact spot on the page* it came from — so you can trust it at a glance instead of
+re-checking it by hand. It even tells you what's still missing compared with last year.
+
+What's left is the part that was never the problem: reviewing a clean, verified summary and
+filing it — yourself, with your return software, or by handing your CPA a package they can act
+on immediately.
+
+Everything runs on your machine. Nothing is uploaded.
+
+```
+  input\  ──▶  classify  ──▶  extract (deterministic-first)  ──▶  library\<year>\<taxpayer>\<category>\
+ (inbox)        (doc type,       (values + source anchors)          (renamed, deduped, hash-verified)
+                 taxpayer,                    │
+                 tax year)                    ▼
+                                      SQLite evidence graph  ──▶  Review · Analytics · FDX / CPA export → file
+```
 
 ---
 
 ## Why it's different
 
+- **Hours of sorting collapse to seconds.** Documents are classified and filed automatically,
+  taxpayer entities create themselves from the paperwork, and every value you'll need to file
+  is pulled out for you — no manual re-typing.
+- **Every number is verifiable.** Each extracted value carries a **source anchor** — the
+  document, page, region, and form field it came from. Click a value; the original PDF
+  highlights exactly where it lives. No black-box guesses to second-guess.
 - **Local-first, private by default.** Your documents stay in your folder. The entire
-  ingest path — classification, extraction, the SQLite evidence database, PDF preview — runs
+  pipeline — classification, extraction, the SQLite evidence database, PDF preview — runs
   offline. No account, no server, no telemetry. The only optional network touchpoint is a
   consent-gated AI tier that is **off by default** (and can be pointed at a fully-local model).
 - **Deterministic-first extraction.** Tax Studio reads structured data straight from the PDF
   before it ever reasons about text. An AI model is the *last* resort, not the first.
-- **Every value is traceable.** Each extracted number carries a **source anchor** — the
-  document, page, region, and form field it came from. Click a value; the original PDF
-  highlights exactly where it lives. No black-box guesses.
-- **Your files are never altered.** Originals are copied/renamed into the library by the
-  normalizer with a post-move hash re-verify; the original bytes are never modified.
+- **Your files are never altered.** Originals are copied and renamed into the library by the
+  normalizer with a post-move hash re-verify; the original bytes are left untouched.
+- **Filing-ready output.** Export clean [FDX](https://financialdataexchange.org/) (Financial
+  Data Exchange) JSON or a foldered CPA review package — data you, your return software, or your
+  accountant can file from with confidence.
 - **Agent-ready.** The workspace is self-describing and ships a read-only MCP server, so any
-  coding agent (Claude, etc.) can safely query your tax data — and propose corrections
-  through one scoped, audited write path.
+  coding agent (Claude, etc.) can safely query your tax data — and propose corrections through
+  one scoped, audited write path.
 
 Tax Studio implements the architecture of US provisional patent **64/115,885**, *"In-Situ,
 Model-Independent Document Intelligence with Source-Role-Validated Evidence Grounding,
@@ -55,14 +94,6 @@ Region-Level Selective Invalidation, and Evidence-Bound Deterministic Generation
 
 ## How it works
 
-```
-  input\  ──▶  classify  ──▶  extract (deterministic-first)  ──▶  library\<year>\<taxpayer>\<category>\
- (inbox)        (doc type,       (values + source anchors)          (renamed, deduped, hash-verified)
-                 taxpayer,                    │
-                 tax year)                    ▼
-                                      SQLite evidence graph  ──▶  Review · Analytics · FDX / CPA export
-```
-
 1. **Open a folder** in VS Code and initialize it — each folder is an independent tax
    workspace (open a different folder in another window for a different taxpayer).
 2. **Drop documents** into the workspace's `input\` inbox (or point Tax Studio at external
@@ -71,7 +102,7 @@ Region-Level Selective Invalidation, and Evidence-Bound Deterministic Generation
    then files it into `library\<year>\<taxpayer>\<category>\` with a clean, human-readable name.
    Taxpayers auto-create from the documents themselves — zero setup.
 4. **Review** extracted values side-by-side with the source PDF; approve, correct, or flag.
-5. **Export** clean FDX JSON, or a CPA review package, when you're ready to hand off.
+5. **Export** clean FDX JSON, or a CPA review package, when you're ready to file or hand off.
 
 ---
 
@@ -128,11 +159,11 @@ A per-year, schema-driven intake worksheet (filing status, dependents, income, d
 credits, estimated payments, and more) with a sliding Yes/No toggle and auto-fill from last
 year's answers — a guided way to make sure nothing is missing before you file.
 
-### Analytics & planning (sums only — never liability)
+### Analytics & planning
 Per-taxpayer / per-year rollups of the extracted evidence (W-2 wages, 1099 income by type,
 business income vs. expense, donations), a document checklist, duplicates, needs-review counts,
-and a starter CPA-questions doc. Totals are **sums of your documents only** — Tax Studio never
-computes tax owed.
+and a starter CPA-questions doc. Totals roll straight up from the documents you've filed — a
+clear, verifiable picture of your year before you file.
 
 ### Export
 - **FDX JSON** (independently-written, FDX-shaped schemas; targets FDX **v6.5.0**), per
@@ -239,13 +270,13 @@ the live database schema, so any agent can operate on your data read-only withou
 
 ## Roadmap
 
-Tax Studio's v1 organizes and grounds tax data. The roadmap keeps every extension point that
-IRS-ready filing will need (form-line mappings, calculation lineage, per-year versioning) so
-filing can ship in the near future.
+Tax Studio already does the hard part — turning raw documents into clean, verified,
+filing-ready data. Next it closes the last mile: filing itself.
 
-- **MeF filing readiness** — return worksheets → IRS MeF XML generation validated against
-  locally obtained IRS schemas and business rules → transmitter submission. *v1 still does not
-  compute liability or file.*
+- **Built-in e-filing (IRS MeF)** — turn your reviewed data into IRS MeF XML, validated against
+  locally obtained IRS schemas and business rules, then transmit it. Every extension point
+  filing needs — form-line mappings, calculation lineage, per-year form versioning — is already
+  built in, waiting for this to light up.
 - **Real IRS form packs & year-versioned packs** *(in progress)* — fill/read the official IRS
   AcroForm PDFs; select the correct pack for each document's tax year so history years use that
   year's form.
@@ -260,12 +291,19 @@ mortgage, education, compliance, and more); tax is the first shipping embodiment
 
 ---
 
-## Privacy, data, and disclaimer
+## Important disclaimer
 
-Tax Studio is a **document-organization tool**. It does **not** provide tax, legal, or
-financial advice, does **not** compute tax liability, and does **not** file returns. Always
-review extracted values against your originals and consult a qualified professional before
-filing. You are responsible for the accuracy of your return.
+Tax Studio is a document-organization and data-analytics tool provided **for informational and
+educational purposes only.** It is **not** tax, legal, accounting, or financial advice, and it
+is **not** a substitute for a qualified professional.
+
+- Extracted values and totals are derived from your own documents and may contain errors —
+  **always review them against your originals** before relying on them.
+- Nothing in Tax Studio constitutes a recommendation about how to file, what to claim, or what
+  you owe. Consult a licensed tax professional for guidance on your specific situation.
+- The software is provided **"as is," without warranty of any kind.** You are solely
+  responsible for the accuracy, completeness, and lawful use of anything you file or submit to
+  any tax authority.
 
 ---
 
