@@ -6,35 +6,42 @@ The README references images by **absolute** URL
 (`https://raw.githubusercontent.com/LynxDI/tax-studio/main/media/<name>.png`) — relative paths
 render on GitHub but come up blank on the Marketplace, so always use the full raw URL.
 
-## Intended screenshots
+## Current screenshots
 
 | File | What it shows |
 |------|---------------|
-| `tree.png` | The Tax Studio activity-bar view — the year-first library grouped by taxpayer / category. |
-| `dashboard.png` | The Dashboard webview — per-taxpayer/per-year rollups, checklist, duplicates, needs-review. |
-| `review.png` | The Document Review panel — original PDF (evidence regions highlighted) beside its assembled FDX JSON. |
-| `hero.png` *(optional)* | A designed banner for the top of the README. |
+| `dashboard.png` | Dashboard **Overview** — documents filed, a per-taxpayer document inventory, and the classification-confidence breakdown. |
+| `analytics.png` | Dashboard **Analytics** — evidence sums per entity/bucket, a year-over-year comparison, and the missing / duplicate checks. |
+| `review.png` | **Document Review** split view — extracted 1099-NEC values (one field flagged *missing*, an `ocr` confidence badge, a scannable FDX QR) beside the original PDF. |
 
-## Capturing them
+All three use synthetic, **fake-identity** data (the "Sample" family / Sample Design Studio LLC) —
+never real PII.
 
-Screenshots are captured from a **real, interactive desktop session** (not headless/CI/SSH) by
-driving the built extension inside VS Code Insiders over CDP:
+## How they're captured (headless)
+
+The dashboard and review panels are React webviews, so they render **without a desktop session**:
+a Playwright headless-Chromium harness loads the built `dist/webview/*.js` bundles, stubs the
+VS Code webview API to feed each panel a seeded state, and screenshots the result.
 
 ```bash
 # from the private source repo
-npm run test:integration   # once, to download VS Code Insiders into extension/.vscode-test
-npm run shots              # → tools/ui-shots/01-tree.png, 02-dashboard.png, 03-review.png
+npm run build                       # build the webview bundles into dist/webview/
+node tools/capture-webviews.mjs     # → tools/ui-shots/{dashboard-overview,dashboard-analytics,review-split}.png
 ```
 
-`npm run shots` seeds a throwaway workspace with **synthetic, fake-identity** fixtures (never real
-data, never `G:\`) and writes PNGs to `tools/ui-shots/`. On a headless session it prints a
-`SKIPPED` marker and exits 0 — screenshots are advisory and never gate the build.
+The `review.png` PDF pane is a real fixture PDF rendered by pdf.js (both the PDF and the pdf.js
+worker are passed as `data:` URLs), and its values come from the fixture's ground-truth
+`*.expected.json` so the data pane matches the document exactly.
 
-## Publishing them here
+> A second harness, `npm run shots`, drives a **visible** VS Code over CDP to capture the native
+> activity-bar tree view — but it needs a real interactive desktop (it prints `SKIPPED` on a
+> headless/CI/SSH session). The webview harness above needs no desktop.
 
-1. Copy the captured PNGs into this folder with the names above
-   (`cp tools/ui-shots/01-tree.png <public>/media/tree.png`, etc.).
-2. Add the `<img>` tags to `README.md` (in both the private `extension/README.md` and this public
-   `README.md` — the two must stay byte-identical), using the absolute raw URL form above.
+## Publishing an update
+
+1. Recapture, then copy the PNGs here with the names above
+   (`cp tools/ui-shots/dashboard-overview.png <public>/media/dashboard.png`, etc.).
+2. If image placement changes, update `README.md` — in **both** the private `extension/README.md`
+   and this public `README.md` (they must stay byte-identical) — using the absolute raw URL form.
 3. Commit and push — GitHub updates immediately; the Marketplace listing updates on the next
    `vsce publish`.

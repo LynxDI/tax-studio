@@ -61,6 +61,10 @@ Everything runs on your machine. Nothing is uploaded.
                                       SQLite evidence graph  ──▶  Review · Analytics · FDX / CPA export → file
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/LynxDI/tax-studio/main/media/dashboard.png" alt="Tax Studio dashboard — documents filed, a per-taxpayer document inventory, and the classification-confidence breakdown" width="900" />
+</p>
+
 ---
 
 ## Why it's different
@@ -148,11 +152,16 @@ changes, Tax Studio **selectively invalidates** only the assertions that depende
 changed region — preserving your human review and corrections everywhere else.
 
 ### Document Review panel
-Open any filed document into a split view: **the original PDF on the left** (with evidence
-regions highlighted), **its assembled FDX JSON on the right**. Click a value to jump to its
-source region. Values are **editable inline** — a correction is saved to the database while the
-machine's original value is preserved as history, and re-extraction conflict-checks instead of
-overwriting. Fields a form pack expected but that came back empty are flagged in **red**.
+Open any filed document into a split view: **the extracted values on the left** — the assembled
+FDX data, plus a scannable QR of it — beside **the original PDF on the right**. Click a value to
+highlight exactly where it came from on the page. Values are **editable inline** — a correction
+is saved to the database while the machine's original value is preserved as history, and
+re-extraction conflict-checks instead of overwriting. Fields a form pack expected but that came
+back empty are flagged in **red**.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/LynxDI/tax-studio/main/media/review.png" alt="Document Review split view — extracted 1099-NEC values on the left with a field flagged missing and an FDX QR, beside the original PDF on the right" width="900" />
+</p>
 
 ### Intake worksheet
 A per-year, schema-driven intake worksheet (filing status, dependents, income, deductions,
@@ -164,6 +173,10 @@ Per-taxpayer / per-year rollups of the extracted evidence (W-2 wages, 1099 incom
 business income vs. expense, donations), a document checklist, duplicates, needs-review counts,
 and a starter CPA-questions doc. Totals roll straight up from the documents you've filed — a
 clear, verifiable picture of your year before you file.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/LynxDI/tax-studio/main/media/analytics.png" alt="Analytics — evidence sums per entity and bucket, a year-over-year comparison, and expected-missing and duplicate checks" width="900" />
+</p>
 
 ### Export
 - **FDX JSON** (independently-written, FDX-shaped schemas; targets FDX **v6.5.0**), per
