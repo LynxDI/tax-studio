@@ -12,7 +12,7 @@ render on GitHub but come up blank on the Marketplace, so always use the full ra
 |------|---------------|
 | `dashboard.png` | Dashboard **Overview** — documents filed, a per-taxpayer document inventory, and the classification-confidence breakdown. |
 | `analytics.png` | Dashboard **Analytics** — evidence sums per entity/bucket, a year-over-year comparison, and the missing / duplicate checks. |
-| `review.png` | **Document Review** split view — extracted 1099-NEC values (one field flagged *missing*, an `ocr` confidence badge, a scannable FDX QR) beside the original PDF. |
+| `review.png` | **Document Review** split view — extracted W-2 values (Box 17 flagged *missing*, a confidence badge, a scannable FDX QR) beside the original IRS W-2. |
 
 All three use synthetic, **fake-identity** data (the "Sample" family / Sample Design Studio LLC) —
 never real PII.
@@ -29,9 +29,10 @@ npm run build                       # build the webview bundles into dist/webvie
 node tools/capture-webviews.mjs     # → tools/ui-shots/{dashboard-overview,dashboard-analytics,review-split}.png
 ```
 
-The `review.png` PDF pane is a real fixture PDF rendered by pdf.js (both the PDF and the pdf.js
-worker are passed as `data:` URLs), and its values come from the fixture's ground-truth
-`*.expected.json` so the data pane matches the document exactly.
+The `review.png` PDF pane is the **real IRS W-2 form** (`fixtures/irs-blanks/fw2-2025.pdf`,
+a public-domain federal form) filled with obviously-invalid fake data via `tools/irs-fill.py`
+(PyMuPDF) — the same path `gen-mock-from-packs.mjs` uses. Both the PDF and the pdf.js worker are
+passed as `data:` URLs, and the data pane is built from the same values so the two panes match.
 
 > A second harness, `npm run shots`, drives a **visible** VS Code over CDP to capture the native
 > activity-bar tree view — but it needs a real interactive desktop (it prints `SKIPPED` on a

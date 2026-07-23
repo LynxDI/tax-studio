@@ -160,7 +160,7 @@ re-extraction conflict-checks instead of overwriting. Fields a form pack expecte
 back empty are flagged in **red**.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/LynxDI/tax-studio/main/media/review.png" alt="Document Review split view — extracted 1099-NEC values on the left with a field flagged missing and an FDX QR, beside the original PDF on the right" width="900" />
+  <img src="https://raw.githubusercontent.com/LynxDI/tax-studio/main/media/review.png" alt="Document Review split view — extracted W-2 values on the left (Box 17 flagged missing, plus a scannable FDX QR) beside the original IRS W-2 on the right" width="900" />
 </p>
 
 ### Intake worksheet
