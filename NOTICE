@@ -1,0 +1,19 @@
+Lynx Tax Studio — Third-Party Notices
+
+Lynx Tax Studio is proprietary software (see LICENSE). It bundles the following
+third-party open-source components, which remain licensed under their own terms:
+
+- better-sqlite3 — MIT License — https://github.com/WiseLibs/better-sqlite3
+- pdf-lib — MIT License — https://github.com/Hopding/pdf-lib
+- qrcode-generator — MIT License — https://github.com/kazuhikoarase/qrcode-generator
+- zod — MIT License — https://github.com/colinhacks/zod
+- React and ReactDOM — MIT License — https://github.com/facebook/react
+- pdf.js (pdfjs-dist) — Apache License 2.0 — https://github.com/mozilla/pdf.js
+- @modelcontextprotocol/sdk — MIT License — https://github.com/modelcontextprotocol/typescript-sdk
+
+The optional local Python backend (PyMuPDF and the system Tesseract OCR binary)
+is not bundled; it is installed separately by the user and remains under its
+respective licenses.
+
+Full license texts are available at the URLs above and within each component's
+distribution.
