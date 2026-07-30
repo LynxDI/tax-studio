@@ -1,9 +1,29 @@
 Lynx Tax Studio — Third-Party Notices
 
-Lynx Tax Studio is proprietary software (see LICENSE). It bundles the following
-third-party open-source components, which remain licensed under their own terms:
+Copyright (C) 2026 Lynx DI
 
-- better-sqlite3 — MIT License — https://github.com/WiseLibs/better-sqlite3
+Lynx Tax Studio is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along
+with this program. If not, see <https://www.gnu.org/licenses/>.
+
+The full license text is in the LICENSE file beside this notice.
+
+
+Bundled third-party components
+------------------------------
+
+These remain licensed under their own terms. All are inlined into dist/ by
+esbuild at build time; the published VSIX ships no node_modules tree and no
+native binaries.
+
 - pdf-lib — MIT License — https://github.com/Hopding/pdf-lib
 - qrcode-generator — MIT License — https://github.com/kazuhikoarase/qrcode-generator
 - zod — MIT License — https://github.com/colinhacks/zod
@@ -11,7 +31,11 @@ third-party open-source components, which remain licensed under their own terms:
 - pdf.js (pdfjs-dist) — Apache License 2.0 — https://github.com/mozilla/pdf.js
 - @modelcontextprotocol/sdk — MIT License — https://github.com/modelcontextprotocol/typescript-sdk
 
-The optional local Python backend (PyMuPDF and the system Tesseract OCR binary)
+SQLite is reached through the Node.js `node:sqlite` builtin — no third-party
+SQLite driver is bundled. (better-sqlite3 was removed at M7; it is no longer a
+dependency of any kind, so it is no longer listed above.)
+
+The optional local Python backend (PyMuPDF, and the system Tesseract OCR binary)
 is not bundled; it is installed separately by the user and remains under its
 respective licenses.
 
