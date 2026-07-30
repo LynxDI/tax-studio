@@ -329,5 +329,9 @@ names are trademarks of their respective owners, used for identification only.
 
 ## License
 
-Proprietary — Copyright © 2026 Lynx DI. All rights reserved. See [LICENSE](LICENSE).
-Bundled third-party components remain under their own licenses (see [NOTICE](NOTICE)).
+Copyright © 2026 Lynx DI. Licensed under the **GNU Affero General Public License, version 3 or
+later** (AGPL-3.0-or-later) — see [LICENSE](LICENSE).
+
+This is free software: you may use, study, share and modify it. If you run a modified version to
+provide a service over a network, the AGPL requires you to offer that version's source to its
+users. Bundled third-party components remain under their own licenses (see [NOTICE](NOTICE)).
