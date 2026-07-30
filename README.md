@@ -1,4 +1,4 @@
-<h1 align="center">Lynx Tax Studio for VS Code</h1>
+<h1 align="center">Tax Studio for VS Code</h1>
 
 <p align="center">
   <b>Turn a messy folder of tax documents into a clean, fully-sourced, filing-ready package — privately, on your own machine.</b>
@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/execution-local--first-3fb950" alt="Local-first execution">
   <img src="https://img.shields.io/badge/evidence-source--anchored-2dd4bf" alt="Source-anchored evidence">
   <img src="https://img.shields.io/badge/output-filing--ready-eab308" alt="Filing-ready output">
-  <img src="https://img.shields.io/badge/export-FDX%20JSON-4fc1ff" alt="FDX JSON export">
+  <img src="https://img.shields.io/badge/export-PDF%20%C2%B7%20FDX%20%C2%B7%20e--file-4fc1ff" alt="Exports: filled PDF, FDX JSON, IRS MeF e-file">
   <img src="https://img.shields.io/badge/agent--ready-MCP-8957e5" alt="Agent-ready MCP">
 </p>
 
@@ -215,13 +215,14 @@ the live database schema, so any agent can operate on your data read-only withou
 
 ## Privacy & AI
 
-- **No document content ever leaves your machine** unless you explicitly turn on the AI tier.
-- `lynxTax.allowAiRequests` is **off by default.** With it on, you choose the backend:
-  - **Ollama** — a local model, fully offline; or
-  - **Anthropic** — document *excerpts* are sent to the Anthropic API (requires
-    `ANTHROPIC_API_KEY`). Default model `claude-haiku-4-5`.
-- The AI tier only runs on documents the deterministic tiers can't handle, and any value it
-  returns must re-anchor to source text or it's confidence-capped and flagged for review.
+- **No document content ever leaves your machine** unless you explicitly turn on the
+  receipt vision tier.
+- `lynxTax.allowRemoteExtraction` is **off by default** (machine-scoped — a workspace can
+  never enable it). With it on *and* `lynxTax.receipt.vlmEndpoint` set, receipt page images
+  go to that OpenAI-compatible endpoint — point it at a model **you host** (e.g. a GPU box
+  on your LAN) or a cloud provider (`LYNXTAX_VLM_API_KEY`).
+- The vision tier only runs on receipts, and any value it returns must re-anchor to source
+  text or it's confidence-capped and flagged for review.
 - Tax Studio runs only in a **trusted workspace** (it reads your documents, runs a local
   Python sidecar, and loads a native SQLite module).
 - **Full trust model** — originals-never-altered, working-folder confinement, the read-only
@@ -271,8 +272,8 @@ the live database schema, so any agent can operate on your data read-only withou
 | `lynxTax.treeGrouping` | `section` | Organize the tree by disk section or by taxpayer. |
 | `lynxTax.autoProcessInbox` | `false` | Classify & file automatically as documents appear. |
 | `lynxTax.openDashboardOnStartup` | `true` | Open the dashboard when a workspace loads. |
-| `lynxTax.allowAiRequests` | `false` | Allow the consent-gated AI extraction tier. |
-| `lynxTax.llmProvider` / `llmModel` | `ollama` | AI backend and model when the AI tier is on. |
+| `lynxTax.allowRemoteExtraction` | `false` | Allow the consent-gated receipt vision tier (machine-scoped). |
+| `lynxTax.receipt.vlmEndpoint` / `.vlmModel` | *(empty)* | OpenAI-compatible endpoint + model for receipt vision. |
 | `lynxTax.pythonPath` | *(managed venv)* | Interpreter for the extraction backend. |
 | `lynxTax.ocrEnabled` | `true` | OCR scanned pages that have no text layer. |
 | `lynxTax.generateAgentMap` | `true` | Keep the working folder's agent map in sync with the schema. |
@@ -286,7 +287,7 @@ the live database schema, so any agent can operate on your data read-only withou
 Tax Studio already does the hard part — turning raw documents into clean, verified,
 filing-ready data. Next it closes the last mile: filing itself.
 
-- **Built-in e-filing (IRS MeF)** — turn your reviewed data into IRS MeF XML, validated against
+- **Built-in e-filing (IRS MeF)** *(in development)* — turn your reviewed data into IRS MeF XML, validated against
   locally obtained IRS schemas and business rules, then transmit it. Every extension point
   filing needs — form-line mappings, calculation lineage, per-year form versioning — is already
   built in, waiting for this to light up.
